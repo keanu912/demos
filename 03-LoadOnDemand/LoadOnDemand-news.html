@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>懒加载</title>
+    <style>
+        ul,
+        li {
+            list-style: none;
+        }
+        
+        .image-container {
+            width: 620px;
+            margin: auto;
+        }
+        
+        .clearfix:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+        
+        .image-container li {
+            float: left;
+            margin: 10px;
+        }
+        
+        .image-container li img {
+            width: 240px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="image-container">
+        <ul class="clearfix">
+            <li><img class="loaded" src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg" alt=""></li>
+            <li><img class="loaded" src="http://cdn.jirengu.com/book.jirengu.com/img/2.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/3.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/4.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/5.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/6.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/7.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/8.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/9.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/10.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/11.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/12.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/13.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/14.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/15.jpg" alt=""></li>
+            <li><img src="http://kejian.jirengu.com/data/fe/%E8%AF%BE%E4%BB%B6/32-%E6%87%92%E5%8A%A0%E8%BD%BD/code/blank.jpg" data-src="http://cdn.jirengu.com/book.jirengu.com/img/16.jpg" alt=""></li>
+        </ul>
+    </div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function isVisible($node) {
+            // $node.offset().top 元素距离document顶端的距离
+            // $(window).height() 浏览器窗口的高度
+            // $(document).scrollTop() document滑动的距离
+            if ($(window).height() + $(document).scrollTop() > $node.offset().top && $(document).scrollTop() < $node.offset().top) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //当页面加载完成时,检查每个li是否出现在视线中
+        function checkAllImg() {
+            var $img = $('li>img').not('.loaded');
+            $img.each(function() {
+                if (isVisible($(this))) {
+                    $(this).addClass("loaded");
+                    var url = $(this).attr("data-src");
+                    $(this).attr("src", url);
+                }
+            })
+        }
+        checkAllImg();
+        $(window).on("scroll", checkAllImg);
+    </script>
+</body>
+
+</html>
